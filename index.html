@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Casa Dae | Menú Digital</title>
 
-<!-- Aplica el tema guardado ANTES de pintar, para evitar parpadeo -->
 <script>
   (function () {
     try {
@@ -16,10 +15,8 @@
   })();
 </script>
 
-<!-- Tailwind CDN (para producción, considera compilarlo con Tailwind CLI; para esta demo el CDN es más rápido de iterar) -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Fuentes -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -72,15 +69,12 @@
   .dish-card { transition: transform 0.15s ease; }
   .dish-card:active { transform: scale(0.98); }
 
-  /* Botones de filtro: color manejado con .is-active para no pelear con dark mode */
-  .filter-btn { background:#ffffff; color:rgba(31,61,23,.7); border:1px solid rgba(31,61,23,.1); }
+  .filter-btn { background:#ffffff; color:rgba(31,61,23,.7); border:1px solid rgba(31,61,23,.1); animation: chip-in .3s ease both; }
   .dark .filter-btn { background:rgba(253,248,225,.08); color:rgba(253,248,225,.7); border-color:rgba(253,248,225,.15); }
   .filter-btn.is-active { background:#4A8B3B; color:#FDF8E1; border-color:#4A8B3B; }
   .dark .filter-btn.is-active { background:#FDF8E1; color:#1F3D17; border-color:#FDF8E1; }
 
-  /* Entrada en cascada de los chips de categoría */
-  @keyframes chip-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .filter-btn { animation: chip-in .35s ease both; }
+  @keyframes chip-in { from { opacity: 0; transform: translateX(6px); } to { opacity: 1; transform: translateX(0); } }
   .filter-btn:nth-child(1) { animation-delay: .02s; }
   .filter-btn:nth-child(2) { animation-delay: .05s; }
   .filter-btn:nth-child(3) { animation-delay: .08s; }
@@ -90,6 +84,19 @@
   .filter-btn:nth-child(7) { animation-delay: .20s; }
   .filter-btn:nth-child(8) { animation-delay: .23s; }
   .filter-btn:nth-child(9) { animation-delay: .26s; }
+
+  /* Lista maestro-detalle de Destacados (estilo FIFA19) */
+  .promo-item { width: 100%; text-align: left; padding: .85rem 1rem; border-bottom: 1px solid rgba(31,61,23,.05); border-left: 3px solid transparent; transition: background-color .2s ease; cursor: pointer; }
+  .dark .promo-item { border-bottom-color: rgba(253,248,225,.06); }
+  .promo-item:last-child { border-bottom: none; }
+  .promo-item:hover { background: rgba(74,139,59,.05); }
+  .promo-item .promo-item-tag { display:block; font-size:11px; font-weight:600; color: rgba(31,61,23,.4); }
+  .dark .promo-item .promo-item-tag { color: rgba(253,248,225,.4); }
+  .promo-item .promo-item-title { display:block; font-size:14px; font-weight:600; margin-top:2px; }
+  .promo-item.is-active { background: rgba(74,139,59,.08); border-left-color:#4A8B3B; }
+  .dark .promo-item.is-active { background: rgba(253,248,225,.08); border-left-color:#FDF8E1; }
+  .promo-item.is-active .promo-item-tag { color:#396E2D; }
+  .dark .promo-item.is-active .promo-item-tag { color:#FDF8E1; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -109,9 +116,9 @@
     <p class="text-cream/80 text-sm mt-2">Cargando menú digital...</p>
   </div>
 
-  <!-- ===================== HEADER (fijo) ===================== -->
+  <!-- ===================== HEADER (fijo, pegado a las esquinas reales) ===================== -->
   <header class="fixed top-0 left-0 right-0 z-40 bg-grass dark:bg-forest shadow-md transition-colors duration-300">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3 relative">
+    <div class="w-full px-4 sm:px-6 lg:px-10 py-3 flex items-center gap-3 relative">
       <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 border-cream/40">
         <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
       </div>
@@ -120,7 +127,6 @@
         <p class="text-cream/80 text-xs leading-tight">Comida • Anime • Bebidas</p>
       </div>
 
-      <!-- Botón de configuración (reemplaza el badge "Abierto") -->
       <button id="settings-btn" aria-label="Configuración" class="shrink-0 w-9 h-9 rounded-full bg-cream/15 hover:bg-cream/25 flex items-center justify-center text-cream transition-colors">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
@@ -128,8 +134,7 @@
         </svg>
       </button>
 
-      <!-- Panel de configuración -->
-      <div id="settings-panel" class="hidden absolute top-14 right-4 bg-white dark:bg-[#152b10] rounded-xl shadow-lg p-4 w-56 z-50 border border-forest/5 dark:border-cream/10">
+      <div id="settings-panel" class="hidden absolute top-14 right-4 sm:right-6 lg:right-10 bg-white dark:bg-[#152b10] rounded-xl shadow-lg p-4 w-56 z-50 border border-forest/5 dark:border-cream/10">
         <div class="flex items-center justify-between">
           <span class="text-sm font-600 text-forest dark:text-cream">Modo oscuro</span>
           <button id="dark-toggle" aria-label="Alternar modo oscuro" class="relative w-11 h-6 rounded-full bg-forest/15 dark:bg-grass transition-colors">
@@ -142,22 +147,21 @@
   </header>
 
   <!-- ===================== HERO ===================== -->
-  <section id="hero" class="pt-[72px] min-h-[88vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-grass to-grass-dark dark:from-forest dark:to-black relative overflow-hidden transition-colors duration-300">
+  <section id="hero" class="pt-[72px] min-h-[85vh] lg:min-h-[75vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-grass to-grass-dark dark:from-forest dark:to-black relative overflow-hidden transition-colors duration-300">
 
-    <!-- Fondo decorativo: pointer-events-none para que NUNCA bloquee clics -->
     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,white,transparent_35%),radial-gradient(circle_at_80%_60%,white,transparent_30%)] pointer-events-none"></div>
 
-    <div class="relative z-10 flex flex-col items-center">
-      <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-cream/50 shadow-lg mb-5">
+    <div class="relative z-10 flex flex-col items-center max-w-lg">
+      <div class="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden border-4 border-cream/50 shadow-lg mb-5">
         <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
       </div>
 
-      <h2 class="font-display text-cream text-4xl font-700 tracking-wide mb-2">CASA DAE</h2>
-      <p class="text-cream/90 text-sm mb-1">Comida coreana, snacks y bebidas con sabor a anime</p>
-      <p class="text-cream/70 text-xs max-w-xs mb-8">Elige tu antojo y pide directo por WhatsApp.</p>
+      <h2 class="font-display text-cream text-4xl md:text-5xl lg:text-6xl font-700 tracking-wide mb-2">CASA DAE</h2>
+      <p class="text-cream/90 text-sm md:text-base mb-1">Comida coreana, snacks y bebidas con sabor a anime</p>
+      <p class="text-cream/70 text-xs md:text-sm max-w-xs md:max-w-sm mb-8">Elige tu antojo y pide directo por WhatsApp.</p>
 
       <a href="#menu"
-         class="bg-cream text-grass-dark font-display font-600 text-base px-7 py-3 rounded-full shadow-lg inline-flex items-center gap-2">
+         class="bg-cream text-grass-dark font-display font-600 text-base md:text-lg px-7 md:px-9 py-3 md:py-4 rounded-full shadow-lg inline-flex items-center gap-2 hover:shadow-xl transition-shadow">
         <span>Ver menú</span>
         <svg class="bounce-cta" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 5v14M19 12l-7 7-7-7"/>
@@ -167,50 +171,57 @@
   </section>
 
   <!-- ===================== DESTACADOS / PROMOCIONES ===================== -->
-  <section id="destacados" class="pt-10 pb-2 max-w-3xl mx-auto px-4">
-    <h3 class="font-display text-xl font-600">Destacados</h3>
+  <section id="destacados" class="pt-10 pb-2 max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4">
+    <h3 class="font-display text-xl md:text-2xl font-600">Destacados</h3>
     <p class="text-sm text-forest/60 dark:text-cream/50 mb-4">Promociones y novedades de la semana</p>
 
-    <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 pb-2">
-      <div class="snap-center shrink-0 w-[78%] sm:w-[55%] aspect-[16/10] rounded-2xl bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10 flex flex-col items-center justify-center gap-2 text-forest/30 dark:text-cream/30">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span class="text-xs font-600">Espacio para promoción</span>
-      </div>
-      <div class="snap-center shrink-0 w-[78%] sm:w-[55%] aspect-[16/10] rounded-2xl bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10 flex flex-col items-center justify-center gap-2 text-forest/30 dark:text-cream/30">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span class="text-xs font-600">Espacio para promoción</span>
-      </div>
-      <div class="snap-center shrink-0 w-[78%] sm:w-[55%] aspect-[16/10] rounded-2xl bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10 flex flex-col items-center justify-center gap-2 text-forest/30 dark:text-cream/30">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span class="text-xs font-600">Espacio para promoción</span>
+    <!-- Móvil / tablet: carrusel deslizable -->
+    <div class="lg:hidden flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 pb-2" id="promo-mobile-list"></div>
+
+    <!-- Escritorio: lista + panel grande (estilo maestro-detalle) -->
+    <div class="hidden lg:flex gap-6">
+      <div class="w-72 xl:w-80 shrink-0 bg-white dark:bg-[#152b10] rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden h-fit" id="promo-list"></div>
+      <div class="flex-1 bg-white dark:bg-[#152b10] rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden flex">
+        <div class="w-2/5 shrink-0 bg-grass/10 dark:bg-cream/5 flex items-center justify-center text-grass-dark/40 dark:text-cream/30">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="flex-1 p-8 flex flex-col justify-center">
+          <span id="promo-panel-tag" class="text-[11px] font-700 text-grass-dark dark:text-cream/80 bg-grass/10 dark:bg-cream/10 self-start px-2 py-0.5 rounded-full mb-3"></span>
+          <h4 id="promo-panel-title" class="font-display text-2xl font-600 mb-3"></h4>
+          <p id="promo-panel-desc" class="text-sm text-forest/70 dark:text-cream/60 leading-relaxed max-w-md"></p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ===================== MENÚ ===================== -->
-  <main id="menu" class="pb-6 max-w-3xl mx-auto px-4">
+  <main id="menu" class="pb-6 max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4">
 
     <div class="pt-6 pb-3">
-      <h3 class="font-display text-xl font-600">Nuestro menú</h3>
+      <h3 class="font-display text-xl md:text-2xl font-600">Nuestro menú</h3>
       <p class="text-sm text-forest/60 dark:text-cream/50">Toca una categoría para filtrar</p>
     </div>
 
-    <!-- Filtros por categoría: en cuadrícula centrada, sin cortes ni scroll oculto -->
-    <div class="flex flex-wrap justify-center gap-2 pb-5 sticky top-[64px] bg-cream dark:bg-forest z-30 -mx-4 px-4 pt-1 transition-colors duration-300" id="filter-bar">
-      <button data-filter="todos" class="filter-btn is-active shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Todos</button>
-      <button data-filter="ramyon" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Ramyon / Ramen</button>
-      <button data-filter="japonesa" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Japonesa</button>
-      <button data-filter="coreana" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Comida Coreana</button>
-      <button data-filter="banderillas" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Banderillas Coreanas</button>
-      <button data-filter="sandwich" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Sándwich</button>
-      <button data-filter="bubble-pizza" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Bubble Pizzas</button>
-      <button data-filter="wraps" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Wraps</button>
-      <button data-filter="snacks" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Snacks</button>
+    <div class="sticky top-[64px] z-30 bg-cream dark:bg-forest -mx-4 px-4 pt-2 pb-4 transition-colors duration-300">
+      <div class="relative">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar scroll-smooth" id="filter-scroll">
+          <button data-filter="todos" class="filter-btn is-active shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Todos</button>
+          <button data-filter="ramyon" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Ramyon / Ramen</button>
+          <button data-filter="japonesa" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Japonesa</button>
+          <button data-filter="coreana" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Comida Coreana</button>
+          <button data-filter="banderillas" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Banderillas Coreanas</button>
+          <button data-filter="sandwich" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Sándwich</button>
+          <button data-filter="bubble-pizza" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Bubble Pizzas</button>
+          <button data-filter="wraps" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Wraps</button>
+          <button data-filter="snacks" class="filter-btn shrink-0 text-sm font-600 px-4 py-1.5 rounded-full transition-colors">Snacks</button>
+        </div>
+        <div id="fade-left" class="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-cream dark:from-forest to-transparent opacity-0 transition-opacity duration-300"></div>
+        <div id="fade-right" class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-cream dark:from-forest to-transparent transition-opacity duration-300"></div>
+      </div>
     </div>
 
-    <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5 pt-4">
 
-      <!-- Ramen Tempura -->
       <article data-category="ramyon" class="dish-card bg-white dark:bg-[#152b10] rounded-2xl overflow-hidden shadow-sm border border-forest/5 dark:border-cream/10 flex flex-col transition-colors duration-300">
         <div class="aspect-[4/3] w-full overflow-hidden">
           <img src="img/Comidas/RamenT_img.jpeg" alt="Ramen Tempura" class="w-full h-full object-cover">
@@ -230,7 +241,6 @@
         </div>
       </article>
 
-      <!-- Kushiages Rellenos -->
       <article data-category="japonesa" class="dish-card bg-white dark:bg-[#152b10] rounded-2xl overflow-hidden shadow-sm border border-forest/5 dark:border-cream/10 flex flex-col transition-colors duration-300">
         <div class="aspect-[4/3] w-full overflow-hidden">
           <img src="img/Comidas/Kushiage_img.jpeg" alt="Kushiages Rellenos" class="w-full h-full object-cover">
@@ -250,7 +260,6 @@
         </div>
       </article>
 
-      <!-- Dakgangjeong / Pollo Frito Coreano — SIN FOTO AÚN -->
       <article data-category="coreana" class="dish-card bg-white dark:bg-[#152b10] rounded-2xl overflow-hidden shadow-sm border border-forest/5 dark:border-cream/10 flex flex-col transition-colors duration-300">
         <div class="aspect-[4/3] w-full bg-grass/10 dark:bg-cream/5 flex flex-col items-center justify-center gap-1 text-grass-dark/50 dark:text-cream/30">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -275,7 +284,6 @@
         </div>
       </article>
 
-      <!-- Bubble Pizza Crunchy -->
       <article data-category="bubble-pizza" class="dish-card bg-white dark:bg-[#152b10] rounded-2xl overflow-hidden shadow-sm border border-forest/5 dark:border-cream/10 flex flex-col transition-colors duration-300">
         <div class="aspect-[4/3] w-full overflow-hidden">
           <img src="img/Comidas/BubbleP_img.jpeg" alt="Bubble Pizza Crunchy" class="w-full h-full object-cover">
@@ -297,7 +305,6 @@
 
     </div>
 
-    <!-- Estado vacío para categorías sin platillos aún -->
     <div id="empty-state" class="hidden flex-col items-center justify-center text-center py-16">
       <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-forest/30 dark:text-cream/30 mb-3">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -311,32 +318,34 @@
   </main>
 
   <!-- ===================== FOOTER ===================== -->
-  <footer class="bg-forest text-cream px-4 py-8">
-    <div class="max-w-3xl mx-auto flex flex-col items-center text-center gap-4">
-      <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-cream/30">
-        <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
-      </div>
-      <p class="font-display text-lg font-600">CASA DAE</p>
-      <p class="text-cream/60 text-xs max-w-xs">Menú digital — escanea, elige y pide sin esperar.</p>
-
-      <!-- Reemplaza los href="#" con tus enlaces reales cuando los tengas -->
-      <div class="flex items-center gap-3 mt-1">
-        <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>
-        </a>
-        <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 01-1.38-.9 3.72 3.72 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.19-.49.42-.96.9-1.38.42-.42.82-.68 1.2-.79.37-.14.93-.31 1.95-.36C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.14 0-3.5.01-4.73.07-1.02.05-1.58.22-1.95.36-.49.19-.84.42-1.2.79-.37.36-.6.71-.79 1.2-.14.37-.31.93-.36 1.95-.06 1.23-.07 1.59-.07 4.73s.01 3.5.07 4.73c.05 1.02.22 1.58.36 1.95.19.49.42.84.79 1.2.36.37.71.6 1.2.79.37.14.93.31 1.95.36 1.23.06 1.59.07 4.73.07s3.5-.01 4.73-.07c1.02-.05 1.58-.22 1.95-.36.49-.19.84-.42 1.2-.79.37-.36.6-.71.79-1.2.14-.37.31-.93.36-1.95.06-1.23.07-1.59.07-4.73s-.01-3.5-.07-4.73c-.05-1.02-.22-1.58-.36-1.95a3.22 3.22 0 00-.79-1.2 3.22 3.22 0 00-1.2-.79c-.37-.14-.93-.31-1.95-.36-1.23-.06-1.59-.07-4.73-.07zm0 4.12a5.1 5.1 0 110 10.2 5.1 5.1 0 010-10.2zm0 1.62a3.48 3.48 0 100 6.96 3.48 3.48 0 000-6.96zm5.3-1.8a1.19 1.19 0 11-2.38 0 1.19 1.19 0 012.38 0z"/></svg>
-        </a>
-        <a href="#" aria-label="TikTok" class="w-10 h-10 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 01-3.14-1.4v9.68a5.6 5.6 0 11-4.8-5.55v2.19a3.4 3.4 0 103.4 3.4V2h2.2a4.28 4.28 0 004.34 3.72v2.1a6.3 6.3 0 01-2-.4z"/></svg>
-        </a>
-        <a href="https://wa.me/529851143981" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-10 h-10 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.29-1.39c1.45.79 3.08 1.21 4.7 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm5.83 14.13c-.24.68-1.39 1.32-1.91 1.4-.49.08-1.1.11-1.78-.11-.41-.13-.93-.3-1.61-.59-2.83-1.22-4.68-4.07-4.82-4.26-.14-.19-1.16-1.54-1.16-2.94s.73-2.08.99-2.36c.26-.28.56-.35.75-.35.19 0 .37 0 .53.01.17.01.4-.06.62.48.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.37-.22.62-.13.26.09 1.64.77 1.92.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
-        </a>
+  <footer class="bg-forest text-cream px-4 sm:px-6 py-5">
+    <div class="max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-cream/30 shrink-0">
+          <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
+        </div>
+        <div class="text-left">
+          <p class="font-display text-base font-600 leading-tight">CASA DAE</p>
+          <p class="text-cream/50 text-[11px] leading-tight">Menú digital — sin esperas</p>
+        </div>
       </div>
 
-      <p class="text-cream/40 text-[11px] mt-3">© 2026 Casa Dae. Todos los derechos reservados.</p>
+      <div class="flex items-center gap-2">
+        <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 01-1.38-.9 3.72 3.72 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.19-.49.42-.96.9-1.38.42-.42.82-.68 1.2-.79.37-.14.93-.31 1.95-.36C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.14 0-3.5.01-4.73.07-1.02.05-1.58.22-1.95.36-.49.19-.84.42-1.2.79-.37.36-.6.71-.79 1.2-.14.37-.31.93-.36 1.95-.06 1.23-.07 1.59-.07 4.73s.01 3.5.07 4.73c.05 1.02.22 1.58.36 1.95.19.49.42.84.79 1.2.36.37.71.6 1.2.79.37.14.93.31 1.95.36 1.23.06 1.59.07 4.73.07s3.5-.01 4.73-.07c1.02-.05 1.58-.22 1.95-.36.49-.19.84-.42 1.2-.79.37-.36.6-.71.79-1.2.14-.37.31-.93.36-1.95.06-1.23.07-1.59.07-4.73s-.01-3.5-.07-4.73c-.05-1.02-.22-1.58-.36-1.95a3.22 3.22 0 00-.79-1.2 3.22 3.22 0 00-1.2-.79c-.37-.14-.93-.31-1.95-.36-1.23-.06-1.59-.07-4.73-.07zm0 4.12a5.1 5.1 0 110 10.2 5.1 5.1 0 010-10.2zm0 1.62a3.48 3.48 0 100 6.96 3.48 3.48 0 000-6.96zm5.3-1.8a1.19 1.19 0 11-2.38 0 1.19 1.19 0 012.38 0z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 01-3.14-1.4v9.68a5.6 5.6 0 11-4.8-5.55v2.19a3.4 3.4 0 103.4 3.4V2h2.2a4.28 4.28 0 004.34 3.72v2.1a6.3 6.3 0 01-2-.4z"/></svg>
+        </a>
+        <a href="https://wa.me/529851143981" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.29-1.39c1.45.79 3.08 1.21 4.7 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm5.83 14.13c-.24.68-1.39 1.32-1.91 1.4-.49.08-1.1.11-1.78-.11-.41-.13-.93-.3-1.61-.59-2.83-1.22-4.68-4.07-4.82-4.26-.14-.19-1.16-1.54-1.16-2.94s.73-2.08.99-2.36c.26-.28.56-.35.75-.35.19 0 .37 0 .53.01.17.01.4-.06.62.48.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.37-.22.62-.13.26.09 1.64.77 1.92.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
+        </a>
+      </div>
     </div>
+    <p class="text-center text-cream/30 text-[10px] mt-4">© 2026 Casa Dae. Todos los derechos reservados.</p>
   </footer>
 
   <!-- ===================== BOTÓN FLOTANTE WHATSAPP ===================== -->
@@ -391,6 +400,77 @@
       });
     });
 
+    // Degradados de "hay más categorías" + gesto de pista al cargar
+    const filterScroll = document.getElementById('filter-scroll');
+    const fadeLeft = document.getElementById('fade-left');
+    const fadeRight = document.getElementById('fade-right');
+
+    function updateFades() {
+      const atStart = filterScroll.scrollLeft <= 2;
+      const atEnd = filterScroll.scrollLeft + filterScroll.clientWidth >= filterScroll.scrollWidth - 2;
+      fadeLeft.style.opacity = atStart ? '0' : '1';
+      fadeRight.style.opacity = atEnd ? '0' : '1';
+    }
+    filterScroll.addEventListener('scroll', updateFades);
+    window.addEventListener('resize', updateFades);
+    updateFades();
+
+    setTimeout(() => {
+      updateFades();
+      if (filterScroll.scrollWidth > filterScroll.clientWidth + 4) {
+        filterScroll.scrollTo({ left: 36, behavior: 'smooth' });
+        setTimeout(() => filterScroll.scrollTo({ left: 0, behavior: 'smooth' }), 550);
+      }
+    }, 1400);
+
+    // ===== Destacados: datos compartidos entre carrusel móvil y panel de escritorio =====
+    const promos = [
+      { tag: 'Esta semana', title: 'Espacio para promoción 1', desc: 'Aquí va la descripción de la primera promoción. Reemplaza este texto y agrega la imagen cuando tengas el contenido final.' },
+      { tag: 'Esta semana', title: 'Espacio para promoción 2', desc: 'Aquí va la descripción de la segunda promoción.' },
+      { tag: 'Esta semana', title: 'Espacio para promoción 3', desc: 'Aquí va la descripción de la tercera promoción.' },
+    ];
+
+    // Carrusel móvil
+    const promoMobileList = document.getElementById('promo-mobile-list');
+    promos.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'snap-center shrink-0 w-[80%] sm:w-[55%] aspect-[16/10] rounded-2xl bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10 flex flex-col items-center justify-center gap-2 text-center px-4 text-forest/30 dark:text-cream/30';
+      card.innerHTML = `
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="text-xs font-600">${p.title}</span>
+      `;
+      promoMobileList.appendChild(card);
+    });
+
+    // Lista + panel de escritorio
+    const promoListEl = document.getElementById('promo-list');
+    const promoPanelTag = document.getElementById('promo-panel-tag');
+    const promoPanelTitle = document.getElementById('promo-panel-title');
+    const promoPanelDesc = document.getElementById('promo-panel-desc');
+
+    promos.forEach((p, i) => {
+      const item = document.createElement('button');
+      item.className = 'promo-item' + (i === 0 ? ' is-active' : '');
+      item.innerHTML = `
+        <span class="promo-item-tag">${p.tag}</span>
+        <span class="promo-item-title">${p.title}</span>
+      `;
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.promo-item').forEach(el => el.classList.remove('is-active'));
+        item.classList.add('is-active');
+        promoPanelTag.textContent = p.tag;
+        promoPanelTitle.textContent = p.title;
+        promoPanelDesc.textContent = p.desc;
+      });
+      promoListEl.appendChild(item);
+    });
+
+    if (promos.length) {
+      promoPanelTag.textContent = promos[0].tag;
+      promoPanelTitle.textContent = promos[0].title;
+      promoPanelDesc.textContent = promos[0].desc;
+    }
+
     // Panel de configuración
     const settingsBtn = document.getElementById('settings-btn');
     const settingsPanel = document.getElementById('settings-panel');
@@ -409,7 +489,6 @@
       }
     });
 
-    // Modo oscuro (persistente)
     function applyTheme(isDark) {
       document.documentElement.classList.toggle('dark', isDark);
       try { localStorage.setItem('casadae-theme', isDark ? 'dark' : 'light'); } catch (e) {}
