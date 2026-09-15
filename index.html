@@ -66,6 +66,17 @@
   #loader { transition: opacity 0.5s ease, visibility 0.5s ease; }
   #loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
 
+  /* Imagen de fondo: el color bg-grass de la clase Tailwind sirve de respaldo
+     si esta imagen no carga; la foto se dibuja encima cuando sí existe. */
+  .brand-photo {
+    background-image: url('img/Logo/Casadae_Fondo.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  @media (min-width: 1024px) {
+    #hero.brand-photo { background-position: 65% center; }
+  }
+
   .dish-card { transition: transform 0.15s ease; }
   .dish-card:active { transform: scale(0.98); }
 
@@ -85,18 +96,20 @@
   .filter-btn:nth-child(8) { animation-delay: .23s; }
   .filter-btn:nth-child(9) { animation-delay: .26s; }
 
-  /* Lista maestro-detalle de Destacados (estilo FIFA19) */
-  .promo-item { width: 100%; text-align: left; padding: .85rem 1rem; border-bottom: 1px solid rgba(31,61,23,.05); border-left: 3px solid transparent; transition: background-color .2s ease; cursor: pointer; }
+  .promo-item { width: 100%; text-align: left; padding: 1rem 1.1rem; border-bottom: 1px solid rgba(31,61,23,.05); border-left: 3px solid transparent; transition: background-color .2s ease; cursor: pointer; }
   .dark .promo-item { border-bottom-color: rgba(253,248,225,.06); }
-  .promo-item:last-child { border-bottom: none; }
   .promo-item:hover { background: rgba(74,139,59,.05); }
   .promo-item .promo-item-tag { display:block; font-size:11px; font-weight:600; color: rgba(31,61,23,.4); }
   .dark .promo-item .promo-item-tag { color: rgba(253,248,225,.4); }
-  .promo-item .promo-item-title { display:block; font-size:14px; font-weight:600; margin-top:2px; }
+  .promo-item .promo-item-title { display:block; font-size:15px; font-weight:600; margin-top:3px; }
   .promo-item.is-active { background: rgba(74,139,59,.08); border-left-color:#4A8B3B; }
   .dark .promo-item.is-active { background: rgba(253,248,225,.08); border-left-color:#FDF8E1; }
   .promo-item.is-active .promo-item-tag { color:#396E2D; }
   .dark .promo-item.is-active .promo-item-tag { color:#FDF8E1; }
+
+  .promo-scroll-arrow { transition: color .2s ease; }
+  .promo-scroll-arrow:hover { color: #4A8B3B; }
+  .dark .promo-scroll-arrow:hover { color: #FDF8E1; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -108,12 +121,16 @@
 <body class="bg-cream dark:bg-forest text-forest dark:text-cream antialiased transition-colors duration-300">
 
   <!-- ===================== LOADER ===================== -->
-  <div id="loader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-grass dark:bg-forest">
-    <div class="w-20 h-20 rounded-full overflow-hidden bg-cream/10 flex items-center justify-center">
-      <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
+  <div id="loader" class="brand-photo bg-grass dark:bg-forest fixed inset-0 z-50 flex flex-col items-center justify-center">
+    <div class="absolute inset-0 bg-black/55 pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col items-center">
+      <div class="w-20 h-20 rounded-full overflow-hidden bg-cream/10 flex items-center justify-center border-2 border-cream/30">
+        <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
+      </div>
+      <p class="font-display text-cream text-xl font-600 mt-4 tracking-wide">CASA DAE</p>
+      <p class="text-cream/80 text-sm mt-2">Cargando menú digital...</p>
     </div>
-    <p class="font-display text-cream text-xl font-600 mt-4 tracking-wide">CASA DAE</p>
-    <p class="text-cream/80 text-sm mt-2">Cargando menú digital...</p>
   </div>
 
   <!-- ===================== HEADER (fijo, pegado a las esquinas reales) ===================== -->
@@ -147,18 +164,18 @@
   </header>
 
   <!-- ===================== HERO ===================== -->
-  <section id="hero" class="pt-[72px] min-h-[85vh] lg:min-h-[75vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-grass to-grass-dark dark:from-forest dark:to-black relative overflow-hidden transition-colors duration-300">
+  <section id="hero" class="brand-photo bg-grass dark:bg-forest pt-[72px] min-h-[85vh] lg:min-h-[75vh] flex flex-col items-center justify-center text-center px-6 relative overflow-hidden transition-colors duration-300">
 
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,white,transparent_35%),radial-gradient(circle_at_80%_60%,white,transparent_30%)] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/45 to-black/70 pointer-events-none"></div>
 
     <div class="relative z-10 flex flex-col items-center max-w-lg">
       <div class="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden border-4 border-cream/50 shadow-lg mb-5">
         <img src="img/Logo/Logo_CasaDae.jpeg" alt="Casa Dae" class="w-full h-full object-cover">
       </div>
 
-      <h2 class="font-display text-cream text-4xl md:text-5xl lg:text-6xl font-700 tracking-wide mb-2">CASA DAE</h2>
-      <p class="text-cream/90 text-sm md:text-base mb-1">Comida coreana, snacks y bebidas con sabor a anime</p>
-      <p class="text-cream/70 text-xs md:text-sm max-w-xs md:max-w-sm mb-8">Elige tu antojo y pide directo por WhatsApp.</p>
+      <h2 class="font-display text-cream text-4xl md:text-5xl lg:text-6xl font-700 tracking-wide mb-2 drop-shadow-md">CASA DAE</h2>
+      <p class="text-cream/95 text-sm md:text-base mb-1 drop-shadow">Comida coreana, snacks y bebidas con sabor a anime</p>
+      <p class="text-cream/80 text-xs md:text-sm max-w-xs md:max-w-sm mb-8 drop-shadow">Elige tu antojo y pide directo por WhatsApp.</p>
 
       <a href="#menu"
          class="bg-cream text-grass-dark font-display font-600 text-base md:text-lg px-7 md:px-9 py-3 md:py-4 rounded-full shadow-lg inline-flex items-center gap-2 hover:shadow-xl transition-shadow">
@@ -178,17 +195,27 @@
     <!-- Móvil / tablet: carrusel deslizable -->
     <div class="lg:hidden flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 pb-2" id="promo-mobile-list"></div>
 
-    <!-- Escritorio: lista + panel grande (estilo maestro-detalle) -->
-    <div class="hidden lg:flex gap-6">
-      <div class="w-72 xl:w-80 shrink-0 bg-white dark:bg-[#152b10] rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden h-fit" id="promo-list"></div>
-      <div class="flex-1 bg-white dark:bg-[#152b10] rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden flex">
-        <div class="w-2/5 shrink-0 bg-grass/10 dark:bg-cream/5 flex items-center justify-center text-grass-dark/40 dark:text-cream/30">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        </div>
-        <div class="flex-1 p-8 flex flex-col justify-center">
-          <span id="promo-panel-tag" class="text-[11px] font-700 text-grass-dark dark:text-cream/80 bg-grass/10 dark:bg-cream/10 self-start px-2 py-0.5 rounded-full mb-3"></span>
-          <h4 id="promo-panel-title" class="font-display text-2xl font-600 mb-3"></h4>
-          <p id="promo-panel-desc" class="text-sm text-forest/70 dark:text-cream/60 leading-relaxed max-w-md"></p>
+    <!-- Escritorio: lista con scroll + flechas, y panel de imagen completa con texto sobrepuesto -->
+    <div class="hidden lg:flex gap-6 lg:h-[480px] xl:h-[520px]">
+
+      <!-- Lista de promociones (soporta tantas como agregues, con scroll + flechas) -->
+      <div class="w-72 xl:w-80 shrink-0 bg-white dark:bg-[#152b10] rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden h-full flex flex-col">
+        <button id="promo-scroll-up" aria-label="Subir en la lista" class="promo-scroll-arrow shrink-0 h-8 flex items-center justify-center text-forest/25 dark:text-cream/25 border-b border-forest/5 dark:border-cream/10">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+        <div id="promo-list" class="flex-1 overflow-y-auto no-scrollbar scroll-smooth"></div>
+        <button id="promo-scroll-down" aria-label="Bajar en la lista" class="promo-scroll-arrow shrink-0 h-8 flex items-center justify-center text-forest/25 dark:text-cream/25 border-t border-forest/5 dark:border-cream/10">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Panel: imagen a pantalla completa + texto sobrepuesto con degradado -->
+      <div class="relative flex-1 bg-grass/10 dark:bg-cream/5 rounded-2xl border border-forest/5 dark:border-cream/10 overflow-hidden h-full">
+        <div id="promo-panel-media" class="absolute inset-0 flex items-center justify-center text-grass-dark/25 dark:text-cream/20"></div>
+        <div class="absolute inset-x-0 bottom-0 p-8 xl:p-10 bg-gradient-to-t from-black/85 via-black/50 to-transparent">
+          <span id="promo-panel-tag" class="inline-block text-xs font-700 text-cream/90 bg-white/15 px-3 py-1 rounded-full mb-3 backdrop-blur-sm"></span>
+          <h4 id="promo-panel-title" class="font-display text-white text-3xl xl:text-4xl font-600 mb-2 drop-shadow"></h4>
+          <p id="promo-panel-desc" class="text-white/85 text-base leading-relaxed max-w-md drop-shadow"></p>
         </div>
       </div>
     </div>
@@ -232,7 +259,7 @@
           <p class="text-sm text-forest/70 dark:text-cream/60 mt-1 flex-1">Fideos acompañados con camarones en tempura, alga nori y vegetales.</p>
           <div class="flex items-center justify-between mt-3">
             <span class="font-display text-gochu text-lg font-600">$160 <span class="text-xs text-forest/50 dark:text-cream/40 font-body font-500">MXN</span></span>
-            <a href="https://wa.me/529851143981?text=Hola%2C%20quiero%20pedir%3A%20Ramen%20Tempura%20(%24160%20MXN)"
+            <a href="https://wa.me/5219851116794?text=Hola%2C%20quiero%20pedir%3A%20Ramen%20Tempura%20(%24160%20MXN)"
                target="_blank" rel="noopener"
                class="bg-gochu hover:bg-gochu-dark text-white text-sm font-700 px-4 py-2 rounded-full">
               Pedir
@@ -251,7 +278,7 @@
           <p class="text-sm text-forest/70 dark:text-cream/60 mt-1 flex-1">5 piezas de camarón rellenas de queso, empanizadas y fritas, acompañadas de arroz, vegetales y salsa.</p>
           <div class="flex items-center justify-between mt-3">
             <span class="font-display text-gochu text-lg font-600">$155 <span class="text-xs text-forest/50 dark:text-cream/40 font-body font-500">MXN</span></span>
-            <a href="https://wa.me/529851143981?text=Hola%2C%20quiero%20pedir%3A%20Kushiages%20Rellenos%20(%24155%20MXN)"
+            <a href="https://wa.me/5219851116794?text=Hola%2C%20quiero%20pedir%3A%20Kushiages%20Rellenos%20(%24155%20MXN)"
                target="_blank" rel="noopener"
                class="bg-gochu hover:bg-gochu-dark text-white text-sm font-700 px-4 py-2 rounded-full">
               Pedir
@@ -275,7 +302,7 @@
           <p class="text-sm text-forest/70 dark:text-cream/60 mt-1 flex-1">Pollo frito bañado en salsa picante-agridulce, acompañado de arroz.</p>
           <div class="flex items-center justify-between mt-3">
             <span class="font-display text-gochu text-lg font-600">$160 <span class="text-xs text-forest/50 dark:text-cream/40 font-body font-500">MXN</span></span>
-            <a href="https://wa.me/529851143981?text=Hola%2C%20quiero%20pedir%3A%20Dakgangjeong%20(%24160%20MXN)"
+            <a href="https://wa.me/5219851116794?text=Hola%2C%20quiero%20pedir%3A%20Dakgangjeong%20(%24160%20MXN)"
                target="_blank" rel="noopener"
                class="bg-gochu hover:bg-gochu-dark text-white text-sm font-700 px-4 py-2 rounded-full">
               Pedir
@@ -294,7 +321,7 @@
           <p class="text-sm text-forest/70 dark:text-cream/60 mt-1 flex-1">Bubble pizza con pollo crunchy, salsa de tomate, queso mozzarella y crema, acompañada de papas fritas.</p>
           <div class="flex items-center justify-between mt-3">
             <span class="font-display text-gochu text-lg font-600">$110 <span class="text-xs text-forest/50 dark:text-cream/40 font-body font-500">MXN</span></span>
-            <a href="https://wa.me/529851143981?text=Hola%2C%20quiero%20pedir%3A%20Bubble%20Pizza%20Crunchy%20(%24110%20MXN)"
+            <a href="https://wa.me/5219851116794?text=Hola%2C%20quiero%20pedir%3A%20Bubble%20Pizza%20Crunchy%20(%24110%20MXN)"
                target="_blank" rel="noopener"
                class="bg-gochu hover:bg-gochu-dark text-white text-sm font-700 px-4 py-2 rounded-full">
               Pedir
@@ -340,7 +367,7 @@
         <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 01-3.14-1.4v9.68a5.6 5.6 0 11-4.8-5.55v2.19a3.4 3.4 0 103.4 3.4V2h2.2a4.28 4.28 0 004.34 3.72v2.1a6.3 6.3 0 01-2-.4z"/></svg>
         </a>
-        <a href="https://wa.me/529851143981" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
+        <a href="https://wa.me/5219851116794" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-cream/10 hover:bg-cream/20 flex items-center justify-center transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.29-1.39c1.45.79 3.08 1.21 4.7 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm5.83 14.13c-.24.68-1.39 1.32-1.91 1.4-.49.08-1.1.11-1.78-.11-.41-.13-.93-.3-1.61-.59-2.83-1.22-4.68-4.07-4.82-4.26-.14-.19-1.16-1.54-1.16-2.94s.73-2.08.99-2.36c.26-.28.56-.35.75-.35.19 0 .37 0 .53.01.17.01.4-.06.62.48.24.58.81 2 .88 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.37-.22.62-.13.26.09 1.64.77 1.92.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
         </a>
       </div>
@@ -349,7 +376,7 @@
   </footer>
 
   <!-- ===================== BOTÓN FLOTANTE WHATSAPP ===================== -->
-  <a href="https://wa.me/529851143981?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20el%20men%C3%BA%20de%20Casa%20Dae"
+  <a href="https://wa.me/5219851116794?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20el%20men%C3%BA%20de%20Casa%20Dae"
      target="_blank" rel="noopener"
      class="pulse-wa fixed bottom-5 right-5 z-40 bg-[#25D366] w-14 h-14 rounded-full flex items-center justify-center shadow-lg">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -358,14 +385,12 @@
   </a>
 
   <script>
-    // Loader
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('loader').classList.add('hide');
       }, 1200);
     });
 
-    // Filtros de categoría
     const filterButtons = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('#cards-grid > article');
     const grid = document.getElementById('cards-grid');
@@ -400,7 +425,6 @@
       });
     });
 
-    // Degradados de "hay más categorías" + gesto de pista al cargar
     const filterScroll = document.getElementById('filter-scroll');
     const fadeLeft = document.getElementById('fade-left');
     const fadeRight = document.getElementById('fade-right');
@@ -423,30 +447,60 @@
       }
     }, 1400);
 
-    // ===== Destacados: datos compartidos entre carrusel móvil y panel de escritorio =====
+    // ===== Destacados: agrega aquí tantas promociones como necesites =====
+    // "img" es opcional: si lo agregas (ej. "img/Extra/promo1.jpg"), esa foto
+    // llenará el panel completo. Si lo dejas fuera, se muestra un ícono de
+    // "foto próximamente" mientras consigues el contenido final.
     const promos = [
       { tag: 'Esta semana', title: 'Espacio para promoción 1', desc: 'Aquí va la descripción de la primera promoción. Reemplaza este texto y agrega la imagen cuando tengas el contenido final.' },
       { tag: 'Esta semana', title: 'Espacio para promoción 2', desc: 'Aquí va la descripción de la segunda promoción.' },
       { tag: 'Esta semana', title: 'Espacio para promoción 3', desc: 'Aquí va la descripción de la tercera promoción.' },
+      { tag: 'Próximamente', title: 'Espacio para promoción 4', desc: 'Aquí va la descripción de la cuarta promoción.' },
+      { tag: 'Próximamente', title: 'Espacio para promoción 5', desc: 'Aquí va la descripción de la quinta promoción.' },
+      { tag: 'Evento especial', title: 'Espacio para promoción 6', desc: 'Aquí va la descripción de la sexta promoción.' },
     ];
+
+    const placeholderIconHTML = `
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+      </svg>`;
 
     // Carrusel móvil
     const promoMobileList = document.getElementById('promo-mobile-list');
     promos.forEach(p => {
       const card = document.createElement('div');
-      card.className = 'snap-center shrink-0 w-[80%] sm:w-[55%] aspect-[16/10] rounded-2xl bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10 flex flex-col items-center justify-center gap-2 text-center px-4 text-forest/30 dark:text-cream/30';
-      card.innerHTML = `
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span class="text-xs font-600">${p.title}</span>
-      `;
+      card.className = 'snap-center shrink-0 w-[80%] sm:w-[55%] aspect-[16/10] rounded-2xl overflow-hidden relative bg-white dark:bg-[#152b10] border border-forest/5 dark:border-cream/10';
+      if (p.img) {
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover">
+          <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+            <span class="text-white text-sm font-600 drop-shadow">${p.title}</span>
+          </div>`;
+      } else {
+        card.innerHTML = `
+          <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-center px-4 text-forest/30 dark:text-cream/30">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="text-xs font-600">${p.title}</span>
+          </div>`;
+      }
       promoMobileList.appendChild(card);
     });
 
-    // Lista + panel de escritorio
+    // Lista de escritorio
     const promoListEl = document.getElementById('promo-list');
+    const promoPanelMedia = document.getElementById('promo-panel-media');
     const promoPanelTag = document.getElementById('promo-panel-tag');
     const promoPanelTitle = document.getElementById('promo-panel-title');
     const promoPanelDesc = document.getElementById('promo-panel-desc');
+
+    function renderPanel(p) {
+      promoPanelTag.textContent = p.tag;
+      promoPanelTitle.textContent = p.title;
+      promoPanelDesc.textContent = p.desc;
+      promoPanelMedia.innerHTML = p.img
+        ? `<img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover">`
+        : placeholderIconHTML;
+    }
 
     promos.forEach((p, i) => {
       const item = document.createElement('button');
@@ -458,18 +512,19 @@
       item.addEventListener('click', () => {
         document.querySelectorAll('.promo-item').forEach(el => el.classList.remove('is-active'));
         item.classList.add('is-active');
-        promoPanelTag.textContent = p.tag;
-        promoPanelTitle.textContent = p.title;
-        promoPanelDesc.textContent = p.desc;
+        renderPanel(p);
       });
       promoListEl.appendChild(item);
     });
 
-    if (promos.length) {
-      promoPanelTag.textContent = promos[0].tag;
-      promoPanelTitle.textContent = promos[0].title;
-      promoPanelDesc.textContent = promos[0].desc;
-    }
+    if (promos.length) renderPanel(promos[0]);
+
+    document.getElementById('promo-scroll-up').addEventListener('click', () => {
+      promoListEl.scrollBy({ top: -90, behavior: 'smooth' });
+    });
+    document.getElementById('promo-scroll-down').addEventListener('click', () => {
+      promoListEl.scrollBy({ top: 90, behavior: 'smooth' });
+    });
 
     // Panel de configuración
     const settingsBtn = document.getElementById('settings-btn');
